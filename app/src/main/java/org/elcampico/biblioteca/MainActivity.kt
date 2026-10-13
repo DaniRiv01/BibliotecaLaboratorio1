@@ -1,6 +1,7 @@
 package org.elcampico.biblioteca
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -9,11 +10,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import org.elcampico.biblioteca.ui.theme.BibliotecaTheme
-import android.widget.Toast
 import org.elcampico.biblioteca.ui.login.PantallaLogin
+import org.elcampico.biblioteca.ui.login.PantallaRegistro
+import org.elcampico.biblioteca.ui.theme.BibliotecaTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,11 +26,28 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge() // fondo bajo la barra de estado
         setContent {
             BibliotecaTheme {
-                PantallaLogin(onEntrar = { usuario, _ ->
-                    Toast.makeText(
-                        this@MainActivity, "Hola, $usuario", Toast.LENGTH_SHORT
-                    ).show()
-                })
+                var mostrarLogin by remember { mutableStateOf(true) }
+
+                if (mostrarLogin) {
+                    PantallaLogin(
+                        onEntrar = { usuario, _ ->
+                            Toast.makeText(
+                                this@MainActivity, "Hola, $usuario", Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        onIrARegistro = { mostrarLogin = false }
+                    )
+                } else {
+                    PantallaRegistro(
+                        onCrear = { nombre, _, _ ->
+                            Toast.makeText(
+                                this@MainActivity, "Cuenta de $nombre creada", Toast.LENGTH_SHORT
+                            ).show()
+                            mostrarLogin = true
+                        },
+                        onIrALogin = { mostrarLogin = true }
+                    )
+                }
             }
         }
     }

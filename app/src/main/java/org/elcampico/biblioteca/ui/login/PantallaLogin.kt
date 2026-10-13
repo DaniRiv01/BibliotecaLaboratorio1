@@ -1,9 +1,11 @@
 package org.elcampico.biblioteca.ui.login
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,13 +58,16 @@ val Montserrat = FontFamily(
 private val Oscurecido = Brush.verticalGradient(
     listOf(Color.Black.copy(alpha = 0.3f), Color.Black.copy(alpha = 0.75f))
 )
+
 @Composable
 fun PantallaLogin(
     onEntrar: (usuario: String, clave: String) -> Unit,
+    onIrARegistro: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var usuario by rememberSaveable { mutableStateOf("") }
     var clave by rememberSaveable { mutableStateOf("") }
+
     Box(modifier = modifier.fillMaxSize()) {
         Image(
             painter = painterResource(R.drawable.fondo_login),
@@ -146,6 +151,12 @@ fun PantallaLogin(
             TextButton(onClick = { /* … */ }) {
                 Text("¿Has olvidado la contraseña?", color = Color.White)
             }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("¿No tienes cuenta?", color = Color.White)
+                TextButton(onClick = onIrARegistro) {
+                    Text("Regístrate", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            }
         }
     }
 }
@@ -154,6 +165,6 @@ fun PantallaLogin(
 @Composable
 private fun PantallaLoginPreview() {
     BibliotecaTheme {
-        PantallaLogin(onEntrar = { _, _ -> })
+        PantallaLogin(onEntrar = { _, _ -> }, onIrARegistro = {})
     }
 }
